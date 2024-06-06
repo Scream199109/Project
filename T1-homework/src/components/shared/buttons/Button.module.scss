@@ -1,0 +1,50 @@
+.Button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--button-primary-color);
+  border-radius: 4px;
+  color: var(--white);
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: var(--red-dark);
+  }
+}
+
+.square {
+  padding: 0;
+}
+
+.square.m {
+  width: var(--btn-m);
+  height: var(--btn-m);
+}
+
+.m {
+  width: var(--btn-m);
+  height: var(--btn-m);
+}
+
+.l {
+  width: var(--btn-l);
+  height: var(--btn-height-l);
+}
+
+.xl {
+  width: var(--btn-xl);
+  height: var(--btn-height-l);
+}
+
+.xxl {
+  width: var(--btn-xxl);
+  height: var(--btn-height-l);
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+.fullWidth {
+  width: 100%;
+}

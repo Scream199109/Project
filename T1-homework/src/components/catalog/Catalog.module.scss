@@ -1,0 +1,28 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  margin-top: 54px;
+}
+
+.product_items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 35px;
+  margin-top: 40px;
+}
+
+.search_panel {
+  display: flex;
+  flex-direction: column;
+  gap: 43px;
+}
+
+.show_more_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+}
