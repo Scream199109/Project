@@ -7,7 +7,7 @@ import {
 import {classNames, Mods} from '../lib/classNames/classNames';
 import cls from './Button.module.scss';
 
-export type ButtonVariant = 'clear' | 'outline' | 'filled';
+export type ButtonVariant = 'clear' | 'filled';
 export type ButtonColor = 'normal' | 'success' | 'error';
 
 export type ButtonSize = 'm' | 'l' | 'xl' | 'xxl';
@@ -47,7 +47,7 @@ export const Button = forwardRef(
     const {
       className,
       children,
-      variant = 'outline',
+      variant = 'filled',
       square,
       disabled,
       fullWidth,
@@ -65,7 +65,7 @@ export const Button = forwardRef(
     return (
       <button
         type="button"
-        className={classNames(cls.Button, mods, [
+        className={classNames(cls.button, mods, [
           className,
           cls[variant],
           cls[size],

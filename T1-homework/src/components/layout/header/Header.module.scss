@@ -1,25 +1,29 @@
 .header {
   background-color: var(--blue-primary);
-  height: 528px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-top: 15px;
+  padding-bottom: 88px;
 }
 
 .text_wrapper {
   display: flex;
   flex-direction: column;
   gap: 20px;
-  position: absolute;
-  left: 0px;
-  top: 164px;
-  z-index: 1;
+}
+
+.about {
+  margin-top: 100px;
 }
 
 .title {
   position: absolute;
-  top: 199px;
+  top: 188px;
   left: 32px;
 }
 
 .button {
   margin-top: 20px;
+  z-index: 1;
 }

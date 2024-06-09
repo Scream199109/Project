@@ -24,28 +24,30 @@ items.fill(item);
 
 const Catalog = () => {
   return (
-    <Container>
-      <section className={cls.wrapper} id='catalog'>
-        <div className={cls.title}>
-          <div className={cls.search_panel}>
-            <Text size='xl' weight='bold' variant='dark'>
-              Catalog
-            </Text>
-            <SearchPanel />
+    <div className={cls.wrapper}>
+      <Container>
+        <section className={cls.section} id='catalog'>
+          <div className={cls.title}>
+            <div className={cls.search_panel}>
+              <Text size='xl' weight='bold' variant='dark'>
+                Catalog
+              </Text>
+              <SearchPanel />
+            </div>
           </div>
-        </div>
-        <div className={cls.product_items}>
-          {items.map((item, index) => <ProductItem {...item} id={index} key={`${index}-${item.name}`} />)}
-        </div>
-        <div className={cls.show_more_button}>
-          <Button size='xl'>
-            <Text>
-              Show more
-            </Text>
-          </Button>
-        </div>
-      </section>
-    </Container>
+          <div className={cls.product_items}>
+            {items.map((item, index) => <ProductItem {...item} id={index} key={`${index}-${item.name}`} />)}
+          </div>
+          <div className={cls.show_more_button}>
+            <Button size='xl'>
+              <Text>
+                Show more
+              </Text>
+            </Button>
+          </div>
+        </section>
+      </Container>
+    </div>
   );
 };
 

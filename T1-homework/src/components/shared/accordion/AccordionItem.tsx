@@ -1,4 +1,4 @@
-import PlusIcon from "assets/icons/PlusIcon";
+import PlusIconThin from "assets/icons/PlusIconThin";
 import {useRef} from "react";
 import {classNames} from "../lib/classNames/classNames";
 import {Text} from "../text/Text";
@@ -22,7 +22,7 @@ const AccordionItem = ({question, answer, isOpen, onClick}: Props) => {
       >
         <Text>{question}</Text>
         <span className={classNames(cls.plus_button, {[cls.active]: isOpen})}>
-          <PlusIcon />
+          <PlusIconThin />
         </span>
       </button>
 

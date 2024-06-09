@@ -52,7 +52,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...rest}
         />
-        <p className={cls.warning}> {helpertext && helpertext} </p>
+        {helpertext && <p className={cls.warning}> {helpertext} </p>}
       </>
     );
   });

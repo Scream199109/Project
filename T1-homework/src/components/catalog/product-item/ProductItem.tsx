@@ -8,9 +8,9 @@ import cls from './ProductItem.module.scss';
 const ProductItem = ({image, name, price, id}: CardItemType) => {
   return (
     <div className={cls.wrapper}>
-      <Link to={`/products/${id}`}>
+      <Link to={`/product/${id}`}>
         <span>
-          <img src={image} alt="" />
+          <img src={image} alt="Кроссовки" />
         </span>
         <div className={cls.description}>
           <div>

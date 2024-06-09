@@ -6,6 +6,10 @@
   color: var(--blue-dark);
 }
 
+.grey {
+  color: var(--light-grey);
+}
+
 .left {
   text-align: left;
 }
@@ -21,6 +25,7 @@
 .size_xs {
   font: var(--font-xs);
 }
+
 .size_s {
   font: var(--font-s);
 }

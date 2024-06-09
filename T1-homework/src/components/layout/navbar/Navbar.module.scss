@@ -1,15 +1,37 @@
+.nav {
+  background-color: var(--blue-primary);
+  height: var(--navbar-height-s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.m {
+    height: var(--navbar-height-m);
+  }
+}
+
 .wrapper {
   display: flex;
   justify-content: space-between;
-  background-color: var(--blue-primary);
-  border-bottom: 1px solid var(--border-grey);
-  height: var(--navbar-height);
+  align-items: center;
 }
 
-.nav {
+.withBorder {
+  border-bottom: 1px solid var(--border-grey);
+}
+
+.links {
   display: flex;
   align-items: center;
   gap: 33px;
+}
+
+.link {
+  :hover {
+    transition: all 0.3s ease;
+    text-decoration: underline;
+    color: var(--border-light-grey);
+  }
 }
 
 .cart {

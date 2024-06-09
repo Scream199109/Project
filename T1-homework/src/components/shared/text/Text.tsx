@@ -2,11 +2,15 @@ import {memo} from 'react';
 import {classNames} from '../lib/classNames/classNames';
 import cls from './Text.module.scss';
 
-export type TextVariant = 'dark';
+export type TextVariant = 'dark' | 'grey';
 
 export type TextAlign = 'right' | 'left' | 'center';
 
-export type TextSize = 'xs' | 's' | 'm' | 'l' | 'xl' | 'xxl' | 'big';
+type BaseSize = 's' | 'm' | 'l';
+
+export type Size = 'xs' | 'xl' | 'xxl' | 'big';
+
+export type TextSize = BaseSize | Size;
 
 export type TextWeight = 'normal' | 'semi_bold' | 'bold';
 
@@ -49,7 +53,7 @@ export const Text = memo((props: TextProps) => {
       cls.Text,
       {},
       additionalClasses,
-    )}>
+    )}>  
       {children}
     </p>
   );
