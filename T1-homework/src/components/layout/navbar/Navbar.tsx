@@ -2,7 +2,12 @@ import CartIcon from 'assets/icons/CartIcon';
 import Container from 'components/shared/container/Container';
 import {classNames} from 'components/shared/lib/classNames/classNames';
 import {Text} from 'components/shared/text/Text';
+import {getCart} from 'pages/cart-page/selectors/getCart/getCart';
+import {AppDispatch} from 'providers/store-provider/config/store';
+import {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
+import {fetchCartByUser} from 'services/cart/fetchCartByUser';
 import cls from './Navbar.module.scss';
 
 type Size = 's' | 'm' | 'l';
@@ -13,6 +18,15 @@ type Props = {
 }
 
 const Navbar = ({withBorder, size = 's'}: Props) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchCartByUser(6))
+  }, []);
+
+  const {data} = useSelector(getCart);
+
+  const productsAmount = data?.carts[0]?.products.length;
 
   return (
     <nav className={classNames(cls.nav, {}, [cls[size]])}>
@@ -35,8 +49,10 @@ const Navbar = ({withBorder, size = 's'}: Props) => {
               </Link>
               <span className={cls.cart_item}>
                 <CartIcon />
-                {/*TODO  Заменить значение на актуальные данне*/}
-                <span className={cls.cart_item_counter}>1</span>
+                {
+                  productsAmount &&
+                  <span className={cls.cart_item_counter}>{productsAmount}</span>
+                }
               </span>
             </li>
           </ul>

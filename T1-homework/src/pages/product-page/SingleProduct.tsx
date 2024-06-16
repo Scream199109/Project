@@ -2,16 +2,33 @@ import Navbar from "components/layout/navbar/Navbar";
 import {Button} from "components/shared/buttons/Button";
 import Container from "components/shared/container/Container";
 import {classNames} from "components/shared/lib/classNames/classNames";
+import StarRating from "components/shared/star-rating/StarRating";
 import {Text} from "components/shared/text/Text";
+import {useLayoutEffect, useState} from "react";
 import {useParams} from "react-router-dom";
+import {useGetProductByIdQuery} from "services/product.api";
 import cls from './SingleProduce.module.scss';
 
 const SingleProduct = () => {
+
   const {id} = useParams();
 
+  const ID = id && +id;
 
-  // Для того чтобы не было нулевого товара
-  const ID = id && (+id + 1);
+  const {data, isFetching, error, isError} = useGetProductByIdQuery(ID, {refetchOnMountOrArgChange: true});
+
+  const [currentImage, setCurrentImage] = useState<string | undefined>('');
+
+  useLayoutEffect(() => {
+    setCurrentImage(data?.thumbnail)
+  }, [isFetching, data?.thumbnail])
+
+  if (isError) {
+    //TODO Типизировать по другому error.data
+    return <Text variant="dark" align="center" size="xl">{error.data.message}</Text>
+  }
+
+  if (!data) return null;
 
   return (
     <>
@@ -25,28 +42,28 @@ const SingleProduct = () => {
           </div>
           <section className={cls.section}>
             <div className={cls.product_image}>
-              <img src="/images/shoes.jpg" alt="Кроссовки" />
+              <img src={currentImage} alt="Кроссовки" className={cls.image} />
               <div className={cls.preview_carousel}>
-                <img src="/images/shoes-mini.jpg" alt="миниатюра кроссовки" className={cls.selected} />
-                <img src="/images/shoes-mini.jpg" alt="миниатюра кроссовки" />
-                <img src="/images/shoes-mini.jpg" alt="миниатюра кроссовки" />
-                <img src="/images/shoes-mini.jpg" alt="миниатюра кроссовки" />
-                <img src="/images/shoes-mini.jpg" alt="миниатюра кроссовки" />
-                <img src="/images/shoes-mini.jpg" alt="миниатюра кроссовки" />
+                {data.images?.map((img, index) =>
+                  <span className={cls.preview_carousel_image} key={img}>
+                    <img onClick={() => setCurrentImage(img)} src={img}
+                      className={classNames('', {[cls.selected]: img === currentImage || (currentImage === data.thumbnail && index === 0)})} />
+                  </span>
+                )}
               </div>
             </div>
             <div className={cls.product_info_wrapper}>
               <div className={cls.product_info}>
                 <div className={cls.product_title}>
                   <Text variant="dark" size="l" weight="semi_bold">
-                    Puma Force 1 Shadow
+                    {data.title}
                   </Text>
                   <div className={cls.flex_container}>
                     <Text variant="grey" weight="semi_bold">
                       SKU ID
                     </Text>
                     <Text variant="dark" weight="semi_bold">
-                      {`000${ID}`}
+                      {data.sku}
                     </Text>
                   </div>
                 </div>
@@ -55,9 +72,8 @@ const SingleProduct = () => {
                     Rating
                   </Text>
 
-                  <Text variant="dark" weight="semi_bold">
-                    Rating
-                  </Text>
+                  <StarRating rating={data.rating} />
+
                 </div>
                 <div className={classNames(cls.product_info_field, {}, [cls.flex_container])}>
                   <Text variant="grey" weight="semi_bold">
@@ -65,7 +81,7 @@ const SingleProduct = () => {
                   </Text>
 
                   <Text variant="dark" weight="semi_bold">
-                    500$
+                    {data.price}$
                   </Text>
                 </div>
                 <div className={classNames(cls.product_info_field, {}, [cls.flex_container])}>
@@ -74,7 +90,7 @@ const SingleProduct = () => {
                   </Text>
 
                   <Text variant="dark" weight="semi_bold">
-                    10%
+                    {data.discountPercentage}%
                   </Text>
                 </div>
                 <div className={classNames(cls.product_info_field, {}, [cls.flex_container])}>
@@ -83,7 +99,7 @@ const SingleProduct = () => {
                   </Text>
 
                   <Text variant="dark" weight="semi_bold">
-                    450$
+                    {data.discountPercentage && (data.price - (data.price * data.discountPercentage / 100)).toFixed(2)}$
                   </Text>
                 </div>
                 <div className={classNames(cls.product_info_field, {}, [cls.flex_container])}>
@@ -92,7 +108,7 @@ const SingleProduct = () => {
                   </Text>
 
                   <Text variant="dark" weight="semi_bold">
-                    13
+                    {data.stock}
                   </Text>
                 </div>
                 <div className={classNames(cls.product_info_field, {}, [cls.flex_container])}>
@@ -101,7 +117,7 @@ const SingleProduct = () => {
                   </Text>
 
                   <Text variant="dark" weight="semi_bold">
-                    Puma
+                    {data.brand}
                   </Text>
                 </div>
                 <div className={classNames(cls.product_info_field, {}, [cls.flex_container])}>
@@ -110,7 +126,7 @@ const SingleProduct = () => {
                   </Text>
 
                   <Text variant="dark" weight="semi_bold">
-                    Smartphones
+                    {data.category}
                   </Text>
                 </div>
                 <div className={classNames(cls.product_info_field, {}, [cls.flex_container])}>
@@ -119,7 +135,7 @@ const SingleProduct = () => {
                   </Text>
 
                   <Text variant="dark" weight="semi_bold">
-                    An apple mobile which is nothing like apple
+                    {data.description}
                   </Text>
                 </div>
               </div>
@@ -132,9 +148,8 @@ const SingleProduct = () => {
             </div>
           </section>
         </Container>
-      </div>
+      </div >
     </>
-
   );
 };
 

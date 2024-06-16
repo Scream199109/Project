@@ -1,74 +1,68 @@
 import Navbar from "components/layout/navbar/Navbar";
 import Container from "components/shared/container/Container";
 import {Text} from "components/shared/text/Text";
-import {Product} from "pages/product-page/types/types";
+import {useSelector} from "react-redux";
 import CartItem from "./CartItem";
 import cls from './CartPage.module.scss';
-
-const cartItems: Product[] = [
-  {
-    id: '1',
-    title: 'Essence Mascara Lash Princess',
-    base_price: 110
-  },
-  {
-    id: '2',
-    title: 'Essence Mascara Lash Princess',
-    base_price: 110
-  },
-  {
-    id: '3',
-    title: 'Essence Mascara Lash Princess',
-    base_price: 110
-  },
-]
+import {getCart} from "./selectors/getCart/getCart";
 
 const CartPage = () => {
+
+  const {data} = useSelector(getCart);
+
+  const cart = data?.carts[0];
 
   return (
     <>
       <Navbar size="m" />
-      <div className={cls.wrapper}>
-        <Container>
-          <div className={cls.title}>
-            <Text variant="dark" size="xl" weight="bold">
-              My cart
-            </Text>
+      {
+        cart?.products.length
+          ?
+          <div className={cls.wrapper}>
+            <Container>
+              <div className={cls.title}>
+                <Text variant="dark" size="xl" weight="bold">
+                  My cart
+                </Text>
+              </div>
+              <div className={cls.container}>
+                <section className={cls.section}>
+                  {cart?.products.map(item => <CartItem {...item} key={item.id} />)}
+                </section>
+                <div>
+                  <div className={cls.amount_text}>
+                    <Text variant="grey" size="m">
+                      Total count:
+                    </Text>
+                    <Text variant="dark">
+                      {cart?.totalProducts}
+                    </Text>
+                  </div>
+                  <div className={cls.amount_text}>
+                    <Text variant="grey" size="m">
+                      Total price:
+                    </Text>
+                    <Text variant="dark" weight="bold">
+                      {cart?.total}$
+                    </Text>
+                  </div>
+                  <div className={cls.amount_text}>
+                    <Text variant="grey" size="m">
+                      Total price with discount:
+                    </Text>
+                    <Text variant="dark" weight="bold">
+                      {cart?.discountedTotal}$
+                    </Text>
+                  </div>
+                </div>
+              </div>
+            </Container>
           </div>
-          <div className={cls.container}>
-            <section className={cls.section}>
-              {cartItems.map(item => <CartItem {...item} key={item.id} />)}
-            </section>
-            <div>
-              <div className={cls.amount_text}>
-                <Text variant="grey" size="m">
-                  Total count:
-                </Text>
-                <Text variant="dark">
-                  {cartItems.length}
-                </Text>
-              </div>
-              <div className={cls.amount_text}>
-                <Text variant="grey" size="m">
-                  Total price:
-                </Text>
-                <Text variant="dark" weight="bold">
-                  700$
-                </Text>
-              </div>
-              <div className={cls.amount_text}>
-                <Text variant="grey" size="m">
-                  Total price with discount:
-                </Text>
-                <Text variant="dark" weight="bold">
-                  590$
-                </Text>
-              </div>
-
-            </div>
-          </div>
-        </Container>
-      </div>
+          :
+          <Text variant="dark" align="center" size="xl">
+            Корзина пуста
+          </Text>
+      }
     </>
   );
 };
