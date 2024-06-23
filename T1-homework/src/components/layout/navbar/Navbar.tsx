@@ -2,12 +2,10 @@ import CartIcon from 'assets/icons/CartIcon';
 import Container from 'components/shared/container/Container';
 import {classNames} from 'components/shared/lib/classNames/classNames';
 import {Text} from 'components/shared/text/Text';
+import {getUserAuthData} from 'entities/user/selectors/getUserAuthData';
 import {getCart} from 'pages/cart-page/selectors/getCart/getCart';
-import {AppDispatch} from 'providers/store-provider/config/store';
-import {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
-import {fetchCartByUser} from 'services/cart/fetchCartByUser';
 import cls from './Navbar.module.scss';
 
 type Size = 's' | 'm' | 'l';
@@ -18,15 +16,14 @@ type Props = {
 }
 
 const Navbar = ({withBorder, size = 's'}: Props) => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  useEffect(() => {
-    dispatch(fetchCartByUser(6))
-  }, []);
 
   const {data} = useSelector(getCart);
 
-  const productsAmount = data?.carts[0]?.products.length;
+  const cart = data?.carts && data?.carts[0];
+
+  const productAmount = cart?.products.length;
+
+  const authData = useSelector(getUserAuthData);
 
   return (
     <nav className={classNames(cls.nav, {}, [cls[size]])}>
@@ -40,22 +37,25 @@ const Navbar = ({withBorder, size = 's'}: Props) => {
               Goods4you
             </Text>
           </Link>
-          <ul className={cls.links}>
-            <li className={cls.link}><Link to="/#catalog" ><Text weight='semi_bold' >Catalog</Text> </Link></li>
-            <li className={cls.link}><Link to="/#faq"><Text weight='semi_bold'>FAQ</Text></Link></li>
-            <li className={classNames(cls.cart, {}, [cls.link])}>
-              <Link to="/cart">
-                <Text weight='semi_bold'>Cart</Text>
-              </Link>
-              <span className={cls.cart_item}>
-                <CartIcon />
-                {
-                  productsAmount &&
-                  <span className={cls.cart_item_counter}>{productsAmount}</span>
-                }
-              </span>
-            </li>
-          </ul>
+          {
+            authData &&
+            <ul className={cls.links}>
+              <li className={cls.link}><Link to="/#catalog" ><Text weight='semi_bold' >Catalog</Text> </Link></li>
+              <li className={cls.link}><Link to="/#faq"><Text weight='semi_bold'>FAQ</Text></Link></li>
+              <li className={classNames(cls.cart, {}, [cls.link])}>
+                <Link to="/cart">
+                  <Text weight='semi_bold'>Cart</Text>
+                </Link>
+                <span className={cls.cart_item}>
+                  <CartIcon />
+                  {
+                    !!productAmount &&
+                    <span className={cls.cart_item_counter}>{productAmount}</span>
+                  }
+                </span>
+              </li>
+            </ul>
+          }
         </div>
       </Container>
     </nav>

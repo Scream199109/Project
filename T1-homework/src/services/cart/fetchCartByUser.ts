@@ -1,23 +1,26 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
+import {ThunkConfig} from 'providers/store-provider/config/StateSchema';
 import {CartProduct} from 'services/types/cart';
 
-export const fetchCartByUser = createAsyncThunk(
-  'cart/fetchCartByUser', async (id: number, thunkApi) => {
-    const {rejectWithValue} = thunkApi;
+interface FetchCartByUserProps {
+  id: number;
+}
 
-    if (!id) {
-      throw new Error('');
-    }
+export const fetchCartByUser = createAsyncThunk<
+  CartProduct,
+  FetchCartByUserProps,
+  ThunkConfig<string>
+>(
+  'cart/fetchCartByUser', async (id, thunkApi) => {
+
+    const {rejectWithValue, extra} = thunkApi;
 
     try {
-      const response = await fetch(`https://dummyjson.com/carts/user/${id}`);
-      const data: CartProduct = await response.json();
+      const response = await extra.api.get<CartProduct>(`/carts/user/${id}`);
 
-      if (!data) {
-        throw new Error();
-      }
+      if (!response.data) throw new Error();
 
-      return data;
+      return response.data;
     } catch (e) {
       console.log(e);
       return rejectWithValue('error');

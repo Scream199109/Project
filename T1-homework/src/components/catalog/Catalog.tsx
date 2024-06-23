@@ -3,7 +3,9 @@ import {Button} from 'components/shared/buttons/Button';
 import Container from 'components/shared/container/Container';
 import Loader from 'components/shared/loader/Loader';
 import {Text} from 'components/shared/text/Text';
-import {ChangeEvent, useEffect, useState} from 'react';
+import {useAppDispatch} from 'hooks/useAppDispatch/useAppDispatch';
+import {checkMe} from 'pages/auth-page/services/check-authorization/authMe';
+import {useEffect, useState} from 'react';
 import {useGetAllProductQuery} from 'services/product.api';
 import {useDebounce} from 'utils/debounce';
 import cls from './Catalog.module.scss';
@@ -27,13 +29,15 @@ const initialLimit = 9;
 const Catalog = () => {
   const [skip, setSkip] = useState(0);
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
+  const onChange = (text: string) => {
+    setValue(text)
   }
 
   const onClick = () => {
     refetch();
   }
+
+  const dispatch = useAppDispatch();
 
   const [debouncedSearchText, value, setValue] = useDebounce<string>('');
 
@@ -43,19 +47,22 @@ const Catalog = () => {
     q: debouncedSearchText
   }
 
-  const {data, isFetching, refetch} = useGetAllProductQuery(params, {refetchOnMountOrArgChange: false});
+  const {data, isFetching, refetch} = useGetAllProductQuery(params);
 
   const products = data?.products;
   const total = data?.total;
 
   useEffect(() => {
     setSkip(0);
-  }, [debouncedSearchText, skip]);
+  }, [debouncedSearchText]);
 
   const isShowMoreAvailable = total && products?.length && (products?.length < total);
 
   return (
     <>
+      <Button onClick={() => dispatch(checkMe())}>
+        CHECK
+      </Button >
       <div className={cls.wrapper}>
         <Container>
           <section className={cls.section} id='catalog'>
@@ -64,7 +71,7 @@ const Catalog = () => {
                 <Text size='xl' weight='bold' variant='dark'>
                   Catalog
                 </Text>
-                <SearchPanel onChange={onChange} onClick={onClick} />
+                <SearchPanel onChange={onChange} onClick={onClick} disabled={!debouncedSearchText} />
               </div>
             </div>
             {isFetching ?
@@ -74,7 +81,7 @@ const Catalog = () => {
                 {
                   products?.length ?
                     <div className={cls.product_items}>
-                      {products?.map(item => <ProductItem {...item} id={item.id} key={item.id} />)}
+                      {products?.map(item => <ProductItem product={item} key={item.id} />)}
                     </div>
                     :
                     <p className={cls.no_items_text}>

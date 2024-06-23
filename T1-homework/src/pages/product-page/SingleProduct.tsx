@@ -2,10 +2,17 @@ import Navbar from "components/layout/navbar/Navbar";
 import {Button} from "components/shared/buttons/Button";
 import Container from "components/shared/container/Container";
 import {classNames} from "components/shared/lib/classNames/classNames";
+import Loader from "components/shared/loader/Loader";
 import StarRating from "components/shared/star-rating/StarRating";
 import {Text} from "components/shared/text/Text";
-import {useLayoutEffect, useState} from "react";
+import {useAppDispatch} from "hooks/useAppDispatch/useAppDispatch";
+import CartAddingButtons from "pages/cart-page/CartAddingButtons";
+import {getCart} from "pages/cart-page/selectors/getCart/getCart";
+import {cartActions} from "pages/cart-page/slice/cartSlice";
+import {useCallback, useLayoutEffect, useState} from "react";
+import {useSelector} from "react-redux";
 import {useParams} from "react-router-dom";
+import {fetchCartAddProduct} from "services/cart/fetchCartAddProduct";
 import {useGetProductByIdQuery} from "services/product.api";
 import cls from './SingleProduce.module.scss';
 
@@ -18,6 +25,36 @@ const SingleProduct = () => {
   const {data, isFetching, error, isError} = useGetProductByIdQuery(ID, {refetchOnMountOrArgChange: true});
 
   const [currentImage, setCurrentImage] = useState<string | undefined>('');
+
+  const dispatch = useAppDispatch();
+
+  const cartDetails = useSelector(getCart);
+  const {data: cartData, isLoading} = cartDetails;
+
+  const cart = cartData?.carts[0];
+
+  const isProductAdded = !!cart?.products.find(p => p.id === data?.id);
+  const quantity = cart?.products.find(p => p.id === data?.id)?.quantity;
+
+  const doRequest = useCallback(async (qty: number) => {
+    await dispatch(fetchCartAddProduct({cartId: cart?.id, products: [...cart?.products, {id: data.id, quantity: (quantity ? quantity : 0) + qty}]}));
+  }, [dispatch, quantity, data, cart])
+
+  const onIncreseProductAmount = async () => {
+    doRequest(1)
+  }
+
+  const onDecreseProductAmount = async () => {
+    if (!data) return;
+    if (quantity === 1) {
+      return dispatch(cartActions.removeProduct(data.id))
+    }
+    doRequest(-1)
+  }
+
+  const onAddingToCart = useCallback(async () => {
+    doRequest(1);
+  }, [doRequest])
 
   useLayoutEffect(() => {
     setCurrentImage(data?.thumbnail)
@@ -139,11 +176,28 @@ const SingleProduct = () => {
                   </Text>
                 </div>
               </div>
-
               <div className={cls.button}>
-                <Button size="xl">
-                  Add to cart
-                </Button>
+                {
+                  isProductAdded && quantity >= 1
+                    ?
+                    <CartAddingButtons
+                      productQuantity={quantity}
+                      onIncrese={onIncreseProductAmount}
+                      onDecrese={onDecreseProductAmount}
+                    />
+                    :
+                    <Button size="xl" onClick={onAddingToCart}>
+                      {
+                        isLoading
+                          ?
+                          <Loader />
+                          :
+                          <Text>
+                            Add to cart
+                          </Text>
+                      }
+                    </Button>
+                }
               </div>
             </div>
           </section>

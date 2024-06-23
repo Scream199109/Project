@@ -43,7 +43,7 @@ const CartPage = () => {
                       Total price:
                     </Text>
                     <Text variant="dark" weight="bold">
-                      {cart?.total}$
+                      {cart?.total.toFixed(2)}$
                     </Text>
                   </div>
                   <div className={cls.amount_text}>
@@ -51,7 +51,7 @@ const CartPage = () => {
                       Total price with discount:
                     </Text>
                     <Text variant="dark" weight="bold">
-                      {cart?.discountedTotal}$
+                      {cart?.discountedTotal.toFixed(2)}$
                     </Text>
                   </div>
                 </div>
