@@ -1,23 +1,33 @@
 import MinusIcon from "assets/icons/MinusIcon";
 import PlusIcon from "assets/icons/PlusIcon";
 import {Button} from "components/shared/buttons/Button";
-import Input from "components/shared/input/Input";
+import {Text} from "components/shared/text/Text";
 import cls from './CartPage.module.scss';
 
 type Props = {
   productQuantity?: number;
+  onIncrese?: () => void;
+  onDecrese?: () => void;
+  plusDisabled?: boolean;
+  minusDisabled?: boolean;
 }
 
-const CartAddingButtons = ({productQuantity}: Props) => {
+const CartAddingButtons = ({productQuantity, onIncrese, onDecrese, plusDisabled, minusDisabled}: Props) => {
   return (
     <div className={cls.add_buttons}>
-      <Button>
+      <Button onClick={onDecrese} disabled={minusDisabled}>
         <MinusIcon />
       </Button>
 
-      <Input type="text" className={cls.add_buttons_amount} defaultValue={productQuantity} />
+      <Text
+        className={cls.add_buttons_amount}
+        variant="dark"
+        size="xs"
+      >
+        {productQuantity}
+      </Text>
 
-      <Button>
+      <Button onClick={onIncrese} disabled={plusDisabled}>
         <PlusIcon />
       </Button>
     </div>

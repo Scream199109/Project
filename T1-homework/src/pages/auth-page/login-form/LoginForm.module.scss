@@ -1,0 +1,15 @@
+.wrapper {
+  padding: 60px 46px;
+  border: 1px solid var(--border-lighter-grey);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 55px;
+  width: 628px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

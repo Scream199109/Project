@@ -20,6 +20,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  &.text_elipsis {
+    max-width: 48%;
+  }
 }
 
 .image {
@@ -35,4 +39,9 @@
 
 .cart_buttons {
   display: flex;
+}
+
+.button {
+  position: absolute;
+  right: 0;
 }

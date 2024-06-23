@@ -2,7 +2,7 @@ import {memo} from 'react';
 import {classNames} from '../lib/classNames/classNames';
 import cls from './Text.module.scss';
 
-export type TextVariant = 'dark' | 'grey';
+export type TextVariant = 'dark' | 'grey' | 'danger';
 
 export type TextAlign = 'right' | 'left' | 'center';
 

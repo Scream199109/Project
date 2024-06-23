@@ -1,13 +1,22 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 import {QueryParams} from "components/catalog/Catalog";
+import {TOKEN} from "components/shared/const/localStorage";
+import {API_URL} from "http/index";
 import {Product} from "pages/product-page/types/product.types";
 import {IServerResponse} from "./types/server.response";
 
-const API_URL = 'https://dummyjson.com';
-
 export const productsApi = createApi({
   reducerPath: "products",
-  baseQuery: fetchBaseQuery({baseUrl: API_URL}),
+  baseQuery: fetchBaseQuery({
+    baseUrl: API_URL,
+    prepareHeaders: (headers) => {
+      const token = localStorage.getItem(TOKEN);
+      if (token) {
+        headers.set('Authorization', `Bearer ${token}`)
+        return headers
+      }
+    }
+  }),
   endpoints: (builder) => ({
     getAllProduct: builder.query<IServerResponse<'products', Product[]>, QueryParams>({
       query: (params) => `/products/search?q=${params.q}&limit=${params.limit}&skip=${params.skip}`,

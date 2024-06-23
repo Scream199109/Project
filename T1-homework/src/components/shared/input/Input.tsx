@@ -1,17 +1,23 @@
 import {classNames} from 'components/shared/lib/classNames/classNames';
-import {ChangeEvent, InputHTMLAttributes, forwardRef} from 'react';
+import {InputHTMLAttributes, forwardRef} from 'react';
 import cls from './Input.module.scss';
 
 export type InputType = 'text' | 'number' | 'email' | 'password' | 'tel';
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+type HTMLInputProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange' | 'readOnly' | 'size'
+>;
+
+export interface InputProps extends HTMLInputProps {
   id?: string;
+  value?: string | number;
   type: InputType;
   label?: string;
   name?: string;
   placeholder?: string;
   disabled?: boolean;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string) => void;
   error?: boolean;
   helpertext?: string;
 }
@@ -20,6 +26,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   (props, ref) => {
     const {
       id,
+      value,
       type,
       label,
       name,
@@ -35,6 +42,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       [cls.incorrect]: !!error
     };
 
+    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChange?.(e.target.value);
+    };
+
     return (
       <>
         {
@@ -43,9 +54,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <input
           type={type}
           id={id}
+          value={value}
           name={name}
           placeholder={placeholder}
-          onChange={onChange}
+          onChange={onChangeHandler}
           disabled={disabled}
           className={classNames(cls.input, mods)}
           autoComplete='new-password'
