@@ -8,6 +8,7 @@
   display: flex;
   justify-content: space-between;
   position: relative;
+  margin-bottom: 20px;
 }
 
 .amount_text {
@@ -53,6 +54,11 @@
 .product_info {
   display: flex;
   gap: 10px;
+
+  img {
+    max-width: 100%;
+    max-height: 57px;
+  }
 }
 
 .add_buttons {
@@ -60,6 +66,7 @@
   justify-content: center;
   align-items: center;
   gap: 9px;
+  margin-left: auto;
 }
 
 .add_buttons_amount {

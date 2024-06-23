@@ -9,7 +9,6 @@ import cls from './Button.module.scss';
 
 export type ButtonVariant = 'clear' | 'filled';
 export type ButtonColor = 'normal' | 'success' | 'error';
-
 export type ButtonSize = 'm' | 'l' | 'xl' | 'xxl';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

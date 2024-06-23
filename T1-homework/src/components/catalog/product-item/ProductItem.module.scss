@@ -2,16 +2,37 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  justify-content: space-between;
 }
 
 .description {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
+  gap: 10px;
 }
 
-.button {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+.text {
+
+  p {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    max-width: 100%;
+    max-height: 300px;
+  }
+}
+
+.cart_buttons {
+  display: flex;
 }
